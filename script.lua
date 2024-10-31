@@ -1,5 +1,13 @@
 -- General:
 local plr = game.Players.LocalPlayer
+if plr.PlayerGui:FindFirstChild("f") then
+    plr.PlayerGui:FindFirstChild("f"):Destroy()
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Old gui has been deleted!",
+        Text = "The old Roblox Cheats gui has been deleted!",
+        Duration = 5
+    })
+end
 local frameistopen = true
 local hr = false
 local player = game.Workspace:FindFirstChild(plr.Name)
@@ -36,15 +44,7 @@ PlrGui.BackgroundTransparency = 1
 PlrGui.Size = UDim2.new(0, 295, 0, 223)
 PlrGui.Position = UDim2.new(0.264, 0, 0.024, 0)
 PlrGui.Parent = frame
-PlrGui.CanvasSize = UDim2.new(0, 0, 3, 0)
-PlrGui.Visible = false
-
-local main = Instance.new("ScrollingFrame")
-main.BackgroundTransparency = 1
-main.Size = PlrGui.Size
-main.Position = PlrGui.Position
-main.Parent = frame
-main.CanvasSize = UDim2.new(0, 0, 0, 0)
+PlrGui.CanvasSize = UDim2.new(0, 0, 1.4, 0)
 
 -- Buttons:
 local unvisibleButton = Instance.new("TextButton")
@@ -55,16 +55,6 @@ unvisibleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 unvisibleButton.Text = "Invisible"
 unvisibleButton.TextScaled = true
 unvisibleButton.Font = Enum.Font.Bangers
-
-local RobloxCheats = Instance.new("TextLabel")
-RobloxCheats.Parent = main
-RobloxCheats.Size = UDim2.new(0, 262,0, 50)
-RobloxCheats.Position = UDim2.new(0,0,0,0)
-RobloxCheats.Text = "Roblox Cheats"
-RobloxCheats.Font = Enum.Font.Bangers
-RobloxCheats.TextScaled = true
-RobloxCheats.BackgroundTransparency = 1
-RobloxCheats.TextColor3 = Color3.fromRGB(64, 0, 255)
 
 local visibleButton = Instance.new("TextButton")
 visibleButton.Size = UDim2.new(0, 235, 0, 46)
@@ -402,30 +392,25 @@ corner28.Parent = delobst
 --Functions:
 
 delobst.MouseButton1Click:Connect(function()
-    if del == false then
-        del = true
-    else
-        del = false
-    end
+    del = not del
 
     local Additional = game.Workspace.Roads.Additional
 
-    if del == true then
-        for _, obj in pairs(Additional:GetDescendants()) do
-            if obj:IsA("BasePart") then
+    for _, obj in pairs(Additional:GetDescendants()) do
+        if obj:IsA("BasePart") then
+            if del then
                 obj.CanCollide = false
                 obj.Transparency = 1
-            end
-        end
-    else
-        for _, obj in pairs(Additional:GetDescendants()) do
-            if obj:IsA("BasePart") then
+                delobst.Text = "Add all Road Obstacles"
+            else
                 obj.CanCollide = true
                 obj.Transparency = 0
+                delobst.Text = "Delete all Road Obstacles"
             end
         end
     end
 end)
+
 
 
 local function findNearestVehicleSeat()
