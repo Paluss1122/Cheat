@@ -66,7 +66,7 @@ esp.BackgroundTransparency = 1
 esp.Size = PlrGui.Size
 esp.Position = PlrGui.Position
 esp.Parent = frame
-esp.CanvasSize = UDim2.new(0, 0, 1.1, 0)
+esp.CanvasSize = UDim2.new(0, 0, 1.5, 0)
 esp.Visible = false
 
 -- Buttons:
@@ -402,6 +402,18 @@ showplrhealth.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 showplrhealth.Position = UDim2.new(0, 0, 0, 212)
 showplrhealth.Text = "Show Player Health"
 
+local showplrlist = espbt:Clone()
+showplrlist.Parent = esp
+showplrlist.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+showplrlist.Position = UDim2.new(0, 0, 0, 265)
+showplrlist.Text = "Show Player List"
+
+local guisdelete = espbt:Clone()
+guisdelete.Parent = esp
+guisdelete.BackgroundColor3 = Color3.fromRGB(255,255,255)
+guisdelete.Position = UDim2.new(0, 0, 0, 318)
+guisdelete.Text = "Delete all Guis!"
+
 -- Corners:
 
 local corner1 = Instance.new("UICorner")
@@ -621,16 +633,76 @@ end
 showplrhealth.MouseButton1Click:Connect(function()
     showhealth = not showhealth
     showplrhealth.BackgroundColor3 = showhealth and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Important!",
+        Text = "Turn Esp names off and again on to apply!",
+        Duration = 5
+    })
 end)
+
+guisdelete.MouseButton1Click:Connect(function()
+    for _, all in pairs(plr.PlayerGui:GetChildren()) do
+        if all.Name == "playerlist" then
+            all:Destroy()
+        end
+    end
+end)
+
+local function createScrollingPlayerList()
+    local playerGui = plr:WaitForChild("PlayerGui")
+    
+    if not playerGui:FindFirstChild("playerlist") then
+        local playerList = Instance.new("ScreenGui")
+        playerList.Name = "playerlist"
+        playerList.Parent = playerGui
+        
+        local scrollingFrame = Instance.new("ScrollingFrame")
+        scrollingFrame.Size = UDim2.new(0, 400, 0, 500)
+        scrollingFrame.Position = UDim2.new(0, 10, 0, 10)
+        scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, #Players:GetPlayers() * 50)
+        scrollingFrame.ScrollBarThickness = 12
+        scrollingFrame.Parent = playerList
+        
+        local function updatePlayerList()
+            scrollingFrame:ClearAllChildren()
+            for i, player in pairs(Players:GetPlayers()) do
+                local playerLabel = Instance.new("TextLabel")
+                playerLabel.Size = UDim2.new(1, 0, 0, 20)
+                playerLabel.Position = UDim2.new(0, 0, 0, (i - 1) * 20)
+                playerLabel.Text = player.Name .. " | " .. (player.Team and player.Team.Name or "No Team")
+                playerLabel.BackgroundTransparency = 1
+                playerLabel.TextColor3 = player.TeamColor.Color
+                playerLabel.Parent = scrollingFrame
+                playerLabel.TextScaled = true
+            end
+        end
+        
+        updatePlayerList()
+        game:GetService("RunService").Stepped:Connect(updatePlayerList)
+    end
+end
+
+showplrlist.MouseButton1Click:Connect(createScrollingPlayerList)
+
 
 showteamnamebt.MouseButton1Click:Connect(function()
     showteamname = not showteamname
     showteamnamebt.BackgroundColor3 = showteamname and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Important!",
+        Text = "Turn Esp names off and again on to apply!",
+        Duration = 5
+    })
 end)
 
 espdistancebt.MouseButton1Click:Connect(function()
     espdistance = not espdistance
     espdistancebt.BackgroundColor3 = espdistance and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Important!",
+        Text = "Turn Esp names off and again on to apply!",
+        Duration = 5
+    })
 end)
 
 local function updateBillboards()
@@ -678,6 +750,11 @@ end
 espteamcolor.MouseButton1Click:Connect(function()
     showteamcolor = not showteamcolor
     espteamcolor.BackgroundColor3 = showteamcolor and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Important!",
+        Text = "Turn Esp names off and again on to apply!",
+        Duration = 5
+    })
 end)
 
 delobst.MouseButton1Click:Connect(function()
@@ -691,10 +768,20 @@ delobst.MouseButton1Click:Connect(function()
                 obj.CanCollide = false
                 obj.Transparency = 1
                 delobst.Text = "Add all Road Obstacles"
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Added Road Obstacles",
+                    Text = "All Road Obstacles were added!",
+                    Duration = 5
+                })
             else
                 obj.CanCollide = true
                 obj.Transparency = 0
                 delobst.Text = "Delete all Road Obstacles"
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Removed Reoad Obstacles",
+                    Text = "All Road Obstacles were removed!",
+                    Duration = 5
+                })
             end
         end
     end
