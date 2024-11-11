@@ -18,6 +18,7 @@ local showteamname = false
 local showteamcolor = false
 local showhealth = false
 local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 
 local allowedplrs = {
     "Paluss1122",
