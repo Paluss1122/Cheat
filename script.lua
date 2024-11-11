@@ -114,7 +114,7 @@ start2.BackgroundTransparency = 1
 start2.ImageTransparency = 1
 
 local c = Instance.new("UICorner")
-c.Parent = imageLabel
+c.Parent = start2
 c.CornerRadius = UDim.new(1, 0)
 
 -- Sicherstellen, dass der Frame zu Beginn unsichtbar ist
@@ -492,12 +492,12 @@ corner5.CornerRadius = UDim.new(0, 100)
 corner5.Parent = m
 
 for _, all in ipairs(screenGui:GetDescendants()) do
-    if all:IsA("GuiObject") and all ~= m then
+    if all:IsA("GuiObject") and all ~= m and all ~= start2 then
         local corners = Instance.new("UICorner")
         corners.Parent = all
         corners.CornerRadius = UDim.new(0, 5)
     end
-    if all:IsA("TextLabel") or all:IsA("TextButton") or all:IsA("TextBox") and all ~= hsremotecontrole then
+    if all:IsA("TextLabel") or all:IsA("TextButton") or all:IsA("TextBox")and all ~= hsremotecontrole then
         all.Font = Enum.Font.Bangers
     end
 
