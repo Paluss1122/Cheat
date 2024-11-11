@@ -12,6 +12,12 @@ local frameistopen = true
 local hr = false
 local player = game.Workspace:FindFirstChild(plr.Name)
 local del = false
+local espname = false
+local espdistance = false
+local showteamname = false
+local showteamcolor = false
+local showhealth = false
+local Players = game:GetService("Players")
 
 local f = Instance.new("Folder")
 f.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -44,7 +50,24 @@ PlrGui.BackgroundTransparency = 1
 PlrGui.Size = UDim2.new(0, 295, 0, 223)
 PlrGui.Position = UDim2.new(0.264, 0, 0.024, 0)
 PlrGui.Parent = frame
-PlrGui.CanvasSize = UDim2.new(0, 0, 1.4, 0)
+PlrGui.CanvasSize = UDim2.new(0, 0, 1.32, 0)
+PlrGui.Visible = false
+
+local main = Instance.new("ScrollingFrame")
+main.BackgroundTransparency = 1
+main.Size = PlrGui.Size
+main.Position = PlrGui.Position
+main.Parent = frame
+main.CanvasSize = UDim2.new(0, 0, 0, 0)
+main.ZIndex = 10000
+
+local esp = Instance.new("ScrollingFrame")
+esp.BackgroundTransparency = 1
+esp.Size = PlrGui.Size
+esp.Position = PlrGui.Position
+esp.Parent = frame
+esp.CanvasSize = UDim2.new(0, 0, 1.5, 0)
+esp.Visible = false
 
 -- Buttons:
 local unvisibleButton = Instance.new("TextButton")
@@ -55,6 +78,16 @@ unvisibleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 unvisibleButton.Text = "Invisible"
 unvisibleButton.TextScaled = true
 unvisibleButton.Font = Enum.Font.Bangers
+
+local RobloxCheats = Instance.new("TextLabel")
+RobloxCheats.Parent = main
+RobloxCheats.Size = UDim2.new(0, 262,0, 50)
+RobloxCheats.Position = UDim2.new(0,0,0,0)
+RobloxCheats.Text = "Roblox Cheats"
+RobloxCheats.Font = Enum.Font.Bangers
+RobloxCheats.TextScaled = true
+RobloxCheats.BackgroundTransparency = 1
+RobloxCheats.TextColor3 = Color3.fromRGB(64, 0, 255)
 
 local visibleButton = Instance.new("TextButton")
 visibleButton.Size = UDim2.new(0, 235, 0, 46)
@@ -86,6 +119,17 @@ Plrbt.TextScaled = true
 Plrbt.Font = Enum.Font.Bangers
 Plrbt.Text = "Player"
 
+local espguibt = Instance.new("TextButton")
+espguibt.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+espguibt.Position = UDim2.new(0, 0, 0.62, 0)
+espguibt.Size = UDim2.new(0, 71, 0, 26)
+espguibt.Parent = draggable
+espguibt.BackgroundTransparency = 1
+espguibt.TextColor3 = Color3.fromRGB(255, 0, 0)
+espguibt.TextScaled = true
+espguibt.Font = Enum.Font.Bangers
+espguibt.Text = "ESP"
+
 local carmodbt = Instance.new("TextButton")
 carmodbt.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 carmodbt.Position = UDim2.new(0, 0, 0.25, 0)
@@ -96,6 +140,12 @@ carmodbt.TextColor3 = Color3.fromRGB(255, 0, 0)
 carmodbt.TextScaled = true
 carmodbt.Font = Enum.Font.Bangers
 carmodbt.Text = "Car Mod"
+
+local paulusscripts = carmodbt:Clone()
+paulusscripts.Position = UDim2.new(0, 0, 0.81, 0)
+paulusscripts.Text = "Paulus Scripts"
+paulusscripts.TextColor3 = Color3.fromRGB(0, 0, 255)
+paulusscripts.Parent = draggable
 
 local teleportsbt = Instance.new("TextButton")
 teleportsbt.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -301,6 +351,69 @@ delobst.Position = UDim2.new(0, 0, 0, 275)
 delobst.Parent = PlrGui
 delobst.Text = "Delete all road obstacles!"
 
+local dcbt = Instance.new("ImageLabel")
+dcbt.Position = UDim2.new(0, 0,0.368, 0)
+dcbt.Size = UDim2.new(0, 121, 0, 121)
+dcbt.Image = "rbxassetid://97885640451059"
+dcbt.BackgroundTransparency = 1
+dcbt.Parent = main
+
+local dctl = Instance.new("TextLabel")
+dctl.Position = UDim2.new(0, 0, 0.87, 0)
+dctl.Size = UDim2.new(0, 181, 0, 31)
+dctl.Parent = main
+dctl.BackgroundTransparency = 1
+dctl.Font = Enum.Font.Bangers
+dctl.TextColor3 = Color3.fromRGB(6, 255, 201)
+dctl.Text = "https://discord.gg/RfV6PJWXZY"
+dctl.TextScaled = true
+
+local espbt = Instance.new("TextButton")
+espbt.Position = UDim2.new(0, 0, 0, 0)
+espbt.Size = UDim2.new(0, 235, 0, 46)
+espbt.BackgroundColor3 = Color3.fromRGB(255,0,0)
+espbt.BackgroundTransparency = 0
+espbt.Font = Enum.Font.Bangers
+espbt.Text = "ESP Names"
+espbt.TextScaled = true
+espbt.Parent = esp
+
+local espteamcolor = espbt:Clone()
+espteamcolor.Parent = esp
+espteamcolor.BackgroundColor3 = Color3.fromRGB(255,0,0)
+espteamcolor.Position = UDim2.new(0, 0, 0, 53)
+espteamcolor.Text = "Show Team Color"
+
+local espdistancebt = espbt:Clone()
+espdistancebt.Parent = esp
+espdistancebt.BackgroundColor3 = Color3.fromRGB(255,0,0)
+espdistancebt.Position = UDim2.new(0, 0, 0, 106)
+espdistancebt.Text = "Show Distance"
+
+local showteamnamebt = espbt:Clone()
+showteamnamebt.Parent = esp
+showteamnamebt.BackgroundColor3 = Color3.fromRGB(255,0,0)
+showteamnamebt.Position = UDim2.new(0, 0, 0, 159)
+showteamnamebt.Text = "Show Team Name"
+
+local showplrhealth = espbt:Clone()
+showplrhealth.Parent = esp
+showplrhealth.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+showplrhealth.Position = UDim2.new(0, 0, 0, 212)
+showplrhealth.Text = "Show Player Health"
+
+local showplrlist = espbt:Clone()
+showplrlist.Parent = esp
+showplrlist.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+showplrlist.Position = UDim2.new(0, 0, 0, 265)
+showplrlist.Text = "Show Player List"
+
+local guisdelete = espbt:Clone()
+guisdelete.Parent = esp
+guisdelete.BackgroundColor3 = Color3.fromRGB(255,255,255)
+guisdelete.Position = UDim2.new(0, 0, 0, 318)
+guisdelete.Text = "Delete all Guis!"
+
 -- Corners:
 
 local corner1 = Instance.new("UICorner")
@@ -389,7 +502,260 @@ corner27.Parent = stealnearestvehicle
 local corner28 = corner1:Clone()
 corner28.Parent = delobst
 
+local corner29 = corner1:Clone()
+corner29.Parent = licensePlate
+
+local corner30 = corner1:Clone()
+corner30.Parent = espbt
+
+local corner31 = corner1:Clone()
+corner31.Parent = espteamcolor
+
+local corner32 = corner1:Clone()
+corner32.Parent = espdistancebt
+
+local corner33 = corner1:Clone()
+corner33.Parent = showteamnamebt
+
+local corner34 = corner1:Clone()
+corner34.Parent = showplrhealth
+
 --Functions:
+
+local RunService = game:GetService("RunService")
+
+local function createBillboard(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local character = player.Character
+        if not character:FindFirstChildOfClass("BillboardGui") then
+            local billboard = Instance.new("BillboardGui")
+            billboard.Adornee = character.HumanoidRootPart
+            billboard.Size = UDim2.new(0, 200, 0, 50)
+            billboard.StudsOffset = Vector3.new(0, 3, 0)
+            billboard.AlwaysOnTop = true
+            billboard.Parent = character
+
+            local nameLabel = Instance.new("TextLabel")
+            nameLabel.Size = UDim2.new(1, 0, 0.5, 0)
+            nameLabel.Text = player.Name
+            nameLabel.TextScaled = true
+            nameLabel.BackgroundTransparency = 1
+            nameLabel.TextColor3 = Color3.fromRGB(255,255,255)
+            nameLabel.Parent = billboard
+            nameLabel.Visible = true
+
+            local distanceLabel = Instance.new("TextLabel")
+            distanceLabel.Size = UDim2.new(1, 0, 0.5, 0)
+            distanceLabel.Position = UDim2.new(0, 0, 0.5, 0)
+            distanceLabel.TextScaled = true
+            distanceLabel.BackgroundTransparency = 1
+            distanceLabel.TextColor3 = Color3.fromRGB(255,255,255)
+            distanceLabel.Parent = billboard
+            distanceLabel.Visible = false
+
+            local teamLabel = Instance.new("TextLabel")
+            teamLabel.Size = UDim2.new(1, 0, 0.5, 0)
+            teamLabel.Position = UDim2.new(0, 0, 0.99, 0)
+            teamLabel.TextScaled = true
+            teamLabel.BackgroundTransparency = 1
+            teamLabel.TextColor3 = Color3.fromRGB(255,255,255)
+            teamLabel.Text = player.Team.Name
+            teamLabel.Parent = billboard
+            teamLabel.Visible = false
+
+            local roundedHealth = math.floor(game.Workspace[player.Name].Humanoid.Health)
+
+            local health = Instance.new("TextLabel")
+            health.Size = UDim2.new(1, 0, 0.5, 0)
+            health.Position = UDim2.new(0, 0, 0, -20)
+            health.TextScaled = true
+            health.BackgroundTransparency = 1
+            health.TextColor3 = Color3.fromRGB(255,255,255)
+            health.Text = "Health: " .. roundedHealth
+            health.Parent = billboard
+            health.Visible = false
+
+            if showteamname then
+                teamLabel.Visible = true
+            else
+                teamLabel.Visible = false
+            end
+
+            if espdistance then
+                distanceLabel.Visible = true
+            else
+                distanceLabel.Visible = false
+            end
+
+            if showhealth then
+                health.Visible = true
+            else 
+                health.Visible = false
+            end
+
+            if showteamcolor then
+                nameLabel.TextColor3 = player.TeamColor.Color
+                distanceLabel.TextColor3 = player.TeamColor.Color
+                teamLabel.TextColor3 = player.TeamColor.Color
+                health.TextColor3 = player.TeamColor.Color
+            else
+                nameLabel.TextColor3 = Color3.fromRGB(255,255,255)
+                distanceLabel.TextColor3 = Color3.fromRGB(255,255,255)
+                teamLabel.TextColor3 = Color3.fromRGB(255,255,255)
+                health.TextColor3 = Color3.fromRGB(255,255,255)
+            end
+
+            if player == plr then
+                billboard:Destroy()
+            end
+
+            RunService.RenderStepped:Connect(function()
+                if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                    local distance = (player.Character.HumanoidRootPart.Position - Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                    distanceLabel.Text = string.format("Distance: %.2f", distance)
+                end
+            end)
+        end
+    end
+end
+
+local function removeBillboard(player)
+    local character = player.Character
+    if character then
+        for _, descendant in pairs(character:GetDescendants()) do
+            if descendant:IsA("BillboardGui") then
+                descendant:Destroy()
+            end
+        end
+    end
+end
+
+showplrhealth.MouseButton1Click:Connect(function()
+    showhealth = not showhealth
+    showplrhealth.BackgroundColor3 = showhealth and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Important!",
+        Text = "Turn Esp names off and again on to apply!",
+        Duration = 5
+    })
+end)
+
+guisdelete.MouseButton1Click:Connect(function()
+    for _, all in pairs(plr.PlayerGui:GetChildren()) do
+        if all.Name == "playerlist" then
+            all:Destroy()
+        end
+    end
+end)
+
+local function createScrollingPlayerList()
+    local playerGui = plr:WaitForChild("PlayerGui")
+    
+    if not playerGui:FindFirstChild("playerlist") then
+        local playerList = Instance.new("ScreenGui")
+        playerList.Name = "playerlist"
+        playerList.Parent = playerGui
+        
+        local scrollingFrame = Instance.new("ScrollingFrame")
+        scrollingFrame.Size = UDim2.new(0, 400, 0, 500)
+        scrollingFrame.Position = UDim2.new(0, 10, 0, 10)
+        scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, #Players:GetPlayers() * 50)
+        scrollingFrame.ScrollBarThickness = 12
+        scrollingFrame.Parent = playerList
+        
+        local function updatePlayerList()
+            scrollingFrame:ClearAllChildren()
+            for i, player in pairs(Players:GetPlayers()) do
+                local playerLabel = Instance.new("TextLabel")
+                playerLabel.Size = UDim2.new(1, 0, 0, 20)
+                playerLabel.Position = UDim2.new(0, 0, 0, (i - 1) * 20)
+                playerLabel.Text = player.Name .. " | " .. (player.Team and player.Team.Name or "No Team")
+                playerLabel.BackgroundTransparency = 1
+                playerLabel.TextColor3 = player.TeamColor.Color
+                playerLabel.Parent = scrollingFrame
+                playerLabel.TextScaled = true
+            end
+        end
+        
+        updatePlayerList()
+        game:GetService("RunService").Stepped:Connect(updatePlayerList)
+    end
+end
+
+showplrlist.MouseButton1Click:Connect(createScrollingPlayerList)
+
+
+showteamnamebt.MouseButton1Click:Connect(function()
+    showteamname = not showteamname
+    showteamnamebt.BackgroundColor3 = showteamname and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Important!",
+        Text = "Turn Esp names off and again on to apply!",
+        Duration = 5
+    })
+end)
+
+espdistancebt.MouseButton1Click:Connect(function()
+    espdistance = not espdistance
+    espdistancebt.BackgroundColor3 = espdistance and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Important!",
+        Text = "Turn Esp names off and again on to apply!",
+        Duration = 5
+    })
+end)
+
+local function updateBillboards()
+    for _, player in pairs(Players:GetPlayers()) do
+        if espname then
+            createBillboard(player)
+        else
+            removeBillboard(player)
+        end
+    end
+end
+
+espbt.MouseButton1Click:Connect(function()
+    espname = not espname
+    updateBillboards()
+    espbt.BackgroundColor3 = espname and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+end)
+
+Players.PlayerRemoving:Connect(removeBillboard)
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function()
+        if espname then
+            createBillboard(player)
+        else
+            removeBillboard(player)
+        end
+    end)
+end)
+
+for _, player in pairs(Players:GetPlayers()) do
+    if player.Character then
+        if espname then
+            createBillboard(player)
+        end
+    else
+        player.CharacterAdded:Connect(function()
+            if espname then
+                createBillboard(player)
+            end
+        end)
+    end
+end
+
+espteamcolor.MouseButton1Click:Connect(function()
+    showteamcolor = not showteamcolor
+    espteamcolor.BackgroundColor3 = showteamcolor and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Important!",
+        Text = "Turn Esp names off and again on to apply!",
+        Duration = 5
+    })
+end)
 
 delobst.MouseButton1Click:Connect(function()
     del = not del
@@ -409,9 +775,21 @@ delobst.MouseButton1Click:Connect(function()
             end
         end
     end
+
+    if del then
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Removed Reoad Obstacles",
+            Text = "All Road Obstacles were removed!",
+            Duration = 5
+        })
+    else
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Added Reoad Obstacles",
+            Text = "All Road Obstacles were added!",
+            Duration = 5
+        })
+    end
 end)
-
-
 
 local function findNearestVehicleSeat()
     local nearestSeat = nil
@@ -450,26 +828,12 @@ stealnearestvehicle.MouseButton1Click:Connect(function()
 end)
 
 carmodbt.MouseButton1Click:Connect(function()
-    if PlrGui then
+    if PlrGui and carmod and Teleports and esp then
         PlrGui.Visible = false
-    else
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Gui Error",
-            Text = "I could'nt find this Gui",
-            Duration = 5
-        })
-    end
-    if carmod then 
         carmod.Visible = true
-    else
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Gui Error",
-            Text = "I could'nt find this Gui",
-            Duration = 5
-        })
-    end
-    if Teleports then
         Teleports.Visible = false
+        main.Visible = false
+        esp.Visible = false
     else
         game.StarterGui:SetCore("SendNotification", {
             Title = "Gui Error",
@@ -501,6 +865,11 @@ lpc.MouseButton1Click:Connect(function()
             Duration = 5
         })
     end
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Important!",
+        Text = "Only you can see the changed License Plate!",
+        Duration = 5
+    })
 end)
 
 local function teleport(position, angles)
@@ -784,6 +1153,8 @@ local function updateVisibility()
         carmodbt.Visible = true
         draggable.Active = true
         teleportsbt.Visible = true
+        espguibt.Visible = true
+        paulusscripts.Visible = true
         game.StarterGui:SetCore("SendNotification", {
             Title = "Frame",
             Text = "The Frame is now visible!",
@@ -797,9 +1168,11 @@ local function updateVisibility()
         carmodbt.Visible = false
         draggable.Active = false
         teleportsbt.Visible = false
+        espguibt.Visible = false
+        paulusscripts.Visible = false
         game.StarterGui:SetCore("SendNotification", {
             Title = "Frame",
-            Text = "The Frame is now unvisible!",
+            Text = "The Frame is now invisible!",
             Duration = 5
         })
     end
@@ -836,16 +1209,28 @@ resetbt.MouseButton1Click:Connect(function()
     })
 end)
 
+espguibt.MouseButton1Click:Connect(function()
+    PlrGui.Visible = false
+    carmod.Visible = false
+    Teleports.Visible = false
+    main.Visible = false
+    esp.Visible = true
+end)
+
 teleportsbt.MouseButton1Click:Connect(function()
     PlrGui.Visible = false
     carmod.Visible = false
     Teleports.Visible = true
+    main.Visible = false
+    esp.Visible = false
 end)
 
 Plrbt.MouseButton1Click:Connect(function()
     PlrGui.Visible = true
     carmod.Visible = false
     Teleports.Visible = false
+    main.Visible = false
+    esp.Visible = false
 end)
 
 m.MouseButton1Click:Connect(function()
