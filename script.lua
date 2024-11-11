@@ -19,6 +19,29 @@ local showteamcolor = false
 local showhealth = false
 local Players = game:GetService("Players")
 
+local allowedplrs = {
+    "Paluss1122",
+    "Paluss11221",
+    "Paluss11222"
+}
+
+local function isPlayerAllowed(name)
+    for _, allowedName in ipairs(allowedplrs) do
+        if name == allowedName then
+            return true
+        end
+    end
+    return false
+end
+
+if not isPlayerAllowed(plr.Name) then
+    RunService.Heartbeat:Connect(function()
+        StarterGui:SetCore("DevConsoleVisible", false)
+        wait(1.5)
+    end)
+end
+
+
 local f = Instance.new("Folder")
 f.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 f.Name = "f"
@@ -70,6 +93,53 @@ esp.CanvasSize = UDim2.new(0, 0, 1.5, 0)
 esp.Visible = false
 
 -- Buttons:
+local start1 = Instance.new("TextLabel")
+start1.Parent = screenGui
+start1.Size = UDim2.new(0.5, 0, 0.2, 0)
+start1.Position = UDim2.new(0.25, 0, 0.52, 0)
+start1.Text = "Paulus Scripts"
+start1.TextSize = 40
+start1.Font = Enum.Font.SourceSansBold
+start1.TextColor3 = Color3.fromRGB(0, 0, 255)
+start1.BackgroundTransparency = 1
+start1.TextTransparency = 1
+
+local start2 = Instance.new("ImageLabel")
+start2.Parent = screenGui
+start2.Size = UDim2.new(0.2, 0, 0.3, 0)
+start2.Position = UDim2.new(0.4, 0, 0.3, 0)
+start2.Image = "rbxassetid://70426163418050" 
+start2.BackgroundTransparency = 1
+start2.ImageTransparency = 1
+
+local c = Instance.new("UICorner")
+c.Parent = imageLabel
+c.CornerRadius = UDim.new(1, 0)
+
+-- Sicherstellen, dass der Frame zu Beginn unsichtbar ist
+draggable.Visible = false
+
+local fadeInInfo = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.In)  -- 1 Sekunde Fade-In
+local fadeOutInfo = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)  -- 1 Sekunde Fade-Out
+
+local fadeInTweenText = TweenService:Create(start1, fadeInInfo, {TextTransparency = 0})
+local fadeInTweenImage = TweenService:Create(start2, fadeInInfo, {ImageTransparency = 0})
+local fadeInTweenFrame = TweenService:Create(draggable, fadeInInfo, {Visible = true})
+
+local fadeOutTweenText = TweenService:Create(start1, fadeOutInfo, {TextTransparency = 1})
+local fadeOutTweenImage = TweenService:Create(start2, fadeOutInfo, {ImageTransparency = 1})
+
+fadeInTweenText:Play()
+fadeInTweenImage:Play()
+fadeInTweenText.Completed:Wait()
+wait(2)
+
+fadeOutTweenText:Play()
+fadeOutTweenImage:Play()
+fadeOutTweenText.Completed:Wait()
+wait(0.5)
+fadeInTweenFrame:Play()
+
 local unvisibleButton = Instance.new("TextButton")
 unvisibleButton.Parent = PlrGui
 unvisibleButton.Size = UDim2.new(0, 235, 0, 46)
