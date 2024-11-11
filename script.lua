@@ -416,109 +416,24 @@ guisdelete.Text = "Delete all Guis!"
 
 -- Corners:
 
-local corner1 = Instance.new("UICorner")
-corner1.CornerRadius = UDim.new(0, 5)
-corner1.Parent = unvisibleButton
-
 local corner5 = Instance.new("UICorner")
 corner5.CornerRadius = UDim.new(0, 100)
 corner5.Parent = m
 
-local corner2 = corner1:Clone()
-corner2.Parent = visibleButton
+for _, all in ipairs(screenGui:GetDescendants()) do
+    if all:IsA("GuiObject") and all ~= m then
+        local corners = Instance.new("UICorner")
+        corners.Parent = all
+        corners.CornerRadius = UDim.new(0, 5)
+    end
+    if all:IsA("TextLabel") or all:IsA("TextButton") or all:IsA("TextBox") and all ~= hsremotecontrole then
+        all.Font = Enum.Font.Bangers
+    end
 
-local corner3 = corner1:Clone()
-corner3.Parent = Delete
-
-local corner4 = corner1:Clone()
-corner4.Parent = resetbt
-
-local corner6 = corner1:Clone()
-corner6.Parent = hasremotecontrole
-
-local corner7 = corner1:Clone()
-corner7.Parent = lc
-
-local corner8 = corner1:Clone()
-corner8.Parent = lpc
-
-local corner9 = corner1:Clone()
-corner9.Parent = ADAC
-
-local corner10 = corner1:Clone()
-corner10.Parent = aresfuel
-
-local corner11 = corner1:Clone()
-corner11.Parent = policestation
-
-local corner12 = corner1:Clone()
-corner12.Parent = firestation
-
-local corner13 = corner1:Clone()
-corner13.Parent = prison
-
-local corner14 = corner1:Clone()
-corner14.Parent = jewelery
-
-local corner15 = corner1:Clone()
-corner15.Parent = bank
-
-local corner16 = corner1:Clone()
-corner16.Parent = Club
-
-local corner17 = corner1:Clone()
-corner17.Parent = gasngo
-
-local corner18 = corner1:Clone()
-corner18.Parent = toolshop
-
-local corner19 = corner1:Clone()
-corner19.Parent = hospital
-
-local corner20 = corner1:Clone()
-corner20.Parent = dealership
-
-local corner21 = corner1:Clone()
-corner21.Parent = buscompany
-
-local corner22 = corner1:Clone()
-corner22.Parent = farmshop
-
-local corner23 = corner1:Clone()
-corner23.Parent = clothesstore
-
-local corner24 = corner1:Clone()
-corner24.Parent = ossofuel
-
-local corner25 = corner1:Clone()
-corner25.Parent = harbor
-
-local corner26 = corner1:Clone()
-corner26.Parent = truckcompany
-
-local corner27 = corner1:Clone()
-corner27.Parent = stealnearestvehicle
-
-local corner28 = corner1:Clone()
-corner28.Parent = delobst
-
-local corner29 = corner1:Clone()
-corner29.Parent = licensePlate
-
-local corner30 = corner1:Clone()
-corner30.Parent = espbt
-
-local corner31 = corner1:Clone()
-corner31.Parent = espteamcolor
-
-local corner32 = corner1:Clone()
-corner32.Parent = espdistancebt
-
-local corner33 = corner1:Clone()
-corner33.Parent = showteamnamebt
-
-local corner34 = corner1:Clone()
-corner34.Parent = showplrhealth
+    if all:IsA("TextBox") then
+        all.Text = all.PlaceholderText
+    end
+end
 
 --Functions:
 
