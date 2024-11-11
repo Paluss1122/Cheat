@@ -768,22 +768,26 @@ delobst.MouseButton1Click:Connect(function()
                 obj.CanCollide = false
                 obj.Transparency = 1
                 delobst.Text = "Add all Road Obstacles"
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "Added Road Obstacles",
-                    Text = "All Road Obstacles were added!",
-                    Duration = 5
-                })
             else
                 obj.CanCollide = true
                 obj.Transparency = 0
                 delobst.Text = "Delete all Road Obstacles"
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "Removed Reoad Obstacles",
-                    Text = "All Road Obstacles were removed!",
-                    Duration = 5
-                })
             end
         end
+    end
+
+    if del then
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Removed Reoad Obstacles",
+            Text = "All Road Obstacles were removed!",
+            Duration = 5
+        })
+    else
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Added Reoad Obstacles",
+            Text = "All Road Obstacles were added!",
+            Duration = 5
+        })
     end
 end)
 
