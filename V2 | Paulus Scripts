@@ -113,7 +113,7 @@ troll.BackgroundTransparency = 1
 troll.Size = PlrGui.Size
 troll.Position = PlrGui.Position
 troll.Parent = frame
-troll.CanvasSize = UDim2.new(0, 0, 1.5, 0)
+troll.CanvasSize = UDim2.new(0, 0, 0, 0)
 troll.Visible = false
 
 local crime = Instance.new("ScrollingFrame")
