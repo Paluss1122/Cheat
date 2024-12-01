@@ -1,0 +1,30 @@
+local function findCheckpoints()
+    local checkpoints = {}
+    for _, obj in pairs(game.Workspace:GetDescendants()) do
+        if obj:IsA("Model") and obj:FindFirstChild("Flag") then
+            table.insert(checkpoints, obj)
+        end
+    end
+    table.sort(checkpoints, function(a, b) return tonumber(a.Name) < tonumber(b.Name) end)
+    return checkpoints
+end
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local checkpoints = findCheckpoints()
+local i = 1
+
+while true do
+    if i > #checkpoints then
+        break
+    end
+    local checkpoint = checkpoints[i].Flag
+    if checkpoint:IsA("Part") then
+        character:SetPrimaryPartCFrame(checkpoint.CFrame)
+        wait(0.2)  -- Warte eine Sekunde vor dem nächsten Teleport, damit es sichtbar ist
+    else
+        break
+    end
+    i = i + 1
+end
