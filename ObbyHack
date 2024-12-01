@@ -1,30 +1,173 @@
-local function findCheckpoints()
-    local checkpoints = {}
-    for _, obj in pairs(game.Workspace:GetDescendants()) do
-        if obj:IsA("Model") and obj:FindFirstChild("Flag") then
-            table.insert(checkpoints, obj)
-        end
+local plr = game.Players.LocalPlayer
+
+for _, child in ipairs(plr:WaitForChild("PlayerGui"):GetChildren()) do
+    if child:IsA("Folder") and child.Name == "f" then
+        child:Destroy()
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "GUI deleted 🟢",
+            Text = "An old Roblox Cheats GUI has been deleted!",
+            Duration = 5
+        })
     end
-    table.sort(checkpoints, function(a, b) return tonumber(a.Name) < tonumber(b.Name) end)
-    return checkpoints
 end
 
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
+local continueTeleport = false
 
-local checkpoints = findCheckpoints()
-local i = 1
+local folder = Instance.new("Folder")
+folder.Name = "f"
+folder.Parent = plr.PlayerGui
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "MainGUI"
+screenGui.ResetOnSpawn = false
+screenGui.DisplayOrder = 10000
+screenGui.Parent = folder
+
+local draggable = Instance.new("Frame")
+draggable.Name = "DraggableFrame"
+draggable.Size = UDim2.new(0, 235, 0, 92)
+draggable.Position = UDim2.new(0.5, -235 / 2, 0.5, -92 / 2)
+draggable.BackgroundTransparency = 1
+draggable.Active = true
+draggable.Draggable = true
+draggable.Parent = screenGui
+draggable.ZIndex = 100
+draggable.Visible = false
+
+local frame = Instance.new("Frame")
+frame.Name = "BackgroundFrame"
+frame.Size = UDim2.new(0, 235, 0, 92)
+frame.Position = UDim2.new(0, 0, 0, 0)
+frame.BackgroundTransparency = 1
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Parent = draggable
+
+local start1 = Instance.new("TextLabel")
+start1.Parent = screenGui
+start1.Size = UDim2.new(0.5, 0, 0.2, 0)
+start1.Position = UDim2.new(0.25, 0, 0.52, 0)
+start1.Text = "Paulus Scripts"
+start1.TextSize = 40
+start1.Font = Enum.Font.SourceSansBold
+start1.TextColor3 = Color3.fromRGB(0, 0, 255)
+start1.BackgroundTransparency = 1
+start1.TextTransparency = 1
+
+local start2 = Instance.new("ImageLabel")
+start2.Parent = screenGui
+start2.Size = UDim2.new(0.2, 0, 0.3, 0)
+start2.Position = UDim2.new(0.4, 0, 0.3, 0)
+start2.Image = "rbxassetid://70426163418050"
+start2.BackgroundTransparency = 1
+start2.ImageTransparency = 1
+
+local c = Instance.new("UICorner")
+c.Parent = start2
+c.CornerRadius = UDim.new(1, 0)
+
+local TweenService = game:GetService("TweenService")
+local fadeInInfo = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.In) 
+local fadeOutInfo = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+
+local fadeInTweenText = TweenService:Create(start1, fadeInInfo, {TextTransparency = 0})
+local fadeInTweenImage = TweenService:Create(start2, fadeInInfo, {ImageTransparency = 0})
+
+local fadeOutTweenText = TweenService:Create(start1, fadeOutInfo, {TextTransparency = 1})
+local fadeOutTweenImage = TweenService:Create(start2, fadeOutInfo, {ImageTransparency = 1})
+
+fadeInTweenText:Play()
+fadeInTweenImage:Play()
+fadeInTweenText.Completed:Wait()
+wait(2)
+
+fadeOutTweenText:Play()
+fadeOutTweenImage:Play()
+fadeOutTweenText.Completed:Wait()
+
+draggable.Visible = true
+
+local startbt = Instance.new("TextButton")
+startbt.Size = UDim2.new(0, 235, 0, 46)
+startbt.Position = UDim2.new(0, 25, 0, 25)
+startbt.Text = "Start Farming!"
+startbt.Parent = frame
+startbt.Visible = true
+startbt.BackgroundColor3 = continueTeleport and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+startbt.TextScaled = true
+startbt.ZIndex = 10
+
+for _, all in ipairs(screenGui:GetDescendants()) do
+    if all:IsA("GuiObject") then
+        local corners = Instance.new("UICorner")
+        corners.Parent = all
+        corners.CornerRadius = UDim.new(0, 5)
+    end
+    if all:IsA("TextLabel") or all:IsA("TextButton") or all:IsA("TextBox") then
+        all.Font = Enum.Font.Bangers
+        all.TextScaled = true
+    end
+
+    if all:IsA("TextBox") then
+        all.Text = all.PlaceholderText
+    end
+end
+
+local currentCheckpointIndex = game.Players.LocalPlayer:WaitForChild("leaderstats"):WaitForChild("Stage").Value or 1
+
+local function Farming()
+    local function findCheckpoints()
+        local checkpoints = {}
+        for _, obj in pairs(game.Workspace:GetDescendants()) do
+            if obj:IsA("Model") and obj:FindFirstChild("Flag") then
+                table.insert(checkpoints, obj)
+            end
+        end
+        table.sort(checkpoints, function(a, b) return tonumber(a.Name) < tonumber(b.Name) end)
+        return checkpoints
+    end
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    while continueTeleport do
+        local checkpoints = findCheckpoints()
+        if currentCheckpointIndex > #checkpoints then
+            continueTeleport = false
+            break
+        end
+
+        local checkpoint = checkpoints[currentCheckpointIndex].Flag
+        if checkpoint:IsA("Part") then
+            character:SetPrimaryPartCFrame(checkpoint.CFrame)
+            wait(0.2)
+        else
+            continueTeleport = false
+        end
+        currentCheckpointIndex = currentCheckpointIndex + 1
+    end
+end
+
+startbt.MouseButton1Click:Connect(function()
+    continueTeleport = not continueTeleport
+    
+    if continueTeleport then
+        task.spawn(Farming)
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "❗ Start farming ❗",
+            Text = "You have activated farming...",
+            Duration = 5
+        })
+    else
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "❗ Canceled farming ❗",
+            Text = "You have disabled farming!",
+            Duration = 5
+        })
+    end
+end)
 
 while true do
-    if i > #checkpoints then
-        break
-    end
-    local checkpoint = checkpoints[i].Flag
-    if checkpoint:IsA("Part") then
-        character:SetPrimaryPartCFrame(checkpoint.CFrame)
-        wait(0.2)  -- Warte eine Sekunde vor dem nächsten Teleport, damit es sichtbar ist
-    else
-        break
-    end
-    i = i + 1
+    startbt.BackgroundColor3 = continueTeleport and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    wait(1)
 end
