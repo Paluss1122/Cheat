@@ -1,0 +1,54 @@
+local rs = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
+
+-- Überprüfen, ob der Ordner "Vehicles" existiert
+local vehiclesFolder = rs:FindFirstChild("Vehicles")
+if not vehiclesFolder then
+    warn("'Vehicles' wurde in ReplicatedStorage nicht gefunden.")
+    return
+end
+
+local folder = game.Workspace:FindFirstChild("Folder")
+if not folder then
+    folder = Instance.new("Folder")
+    folder.Parent = game.Workspace
+end
+
+local player = game.Players.LocalPlayer
+
+local character = player.Character or player.CharacterAdded:Wait()
+
+local startPosition = character:GetPivot().Position + Vector3.new(10, 5, 0)
+
+local xOffset = 0
+local zOffset = 0
+local vehiclesPerRow = 10
+
+game.StarterGui:SetCore("SendNotification", {Title = "Cloning all Vehicles...", Text = "Delete all Cars, by pressing Left Control + U", Duration = 20})
+
+for i, vehicleTemplate in ipairs(vehiclesFolder:GetChildren()) do
+    if vehicleTemplate:IsA("Model") then
+        local clonedVehicle = vehicleTemplate:Clone()
+        clonedVehicle.Parent = folder
+        
+    
+        local newPosition = startPosition + Vector3.new(xOffset, 0, zOffset)
+        clonedVehicle:PivotTo(CFrame.new(newPosition))
+        
+        print("Fahrzeug gespawnt:", clonedVehicle.Name)
+        print("Position:", newPosition)
+        
+        xOffset = xOffset + 20
+        
+        if i % vehiclesPerRow == 0 then
+            xOffset = 0  -- Zurück zur Anfangsposition der X-Achse
+            zOffset = zOffset + 20  -- Gehe zur nächsten Reihe (Abstand von 10 Einheiten auf der Z-Achse)
+        end
+    end
+end
+
+UserInputService.InputBegan:Connect(function(input, isProcessed)
+    if not isProcessed and input.KeyCode == Enum.KeyCode.X and UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+        folder:Destroy()
+    end
+end)
