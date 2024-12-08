@@ -1,0 +1,28 @@
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+local UserInputService = game:GetService("UserInputService")
+
+local deleteMode = false
+
+game.StarterGui:SetCore("SendNotification", {Title = "Start Delete on Click...", Text = "Turn Mode, by pressing Left Control + U", Duration = 20})
+
+UserInputService.InputBegan:Connect(function(input, isProcessed)
+    if not isProcessed and input.KeyCode == Enum.KeyCode.U and UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+        deleteMode = not deleteMode
+        if deleteMode then
+            game.StarterGui:SetCore("SendNotification", {Title = "Delete Mode on!", Text = "Delete Mode is now on!", Duration = 5})
+        else
+            game.StarterGui:SetCore("SendNotification", {Title = "Delete Mode off!", Text = "Delete Mode is now off!", Duration = 5})
+        end
+    end
+end)
+
+mouse.Button1Down:Connect(function()
+    if deleteMode then
+        local target = mouse.Target
+
+        if target and target:IsA("BasePart") and target.Name ~= "Terrain" then
+            target:Destroy()
+        end
+    end
+end)
