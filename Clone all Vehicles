@@ -4,8 +4,7 @@ local UserInputService = game:GetService("UserInputService")
 -- Überprüfen, ob der Ordner "Vehicles" existiert
 local vehiclesFolder = rs:FindFirstChild("Vehicles")
 if not vehiclesFolder then
-    warn("'Vehicles' wurde in ReplicatedStorage nicht gefunden.")
-    return
+    game.StarterGui:SetCore("SendNotification", {Title = "Error", Text = "Couldn't found objects!", Duration = 20})
 end
 
 local folder = game.Workspace:FindFirstChild("Folder")
